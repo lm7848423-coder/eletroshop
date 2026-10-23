@@ -3,10 +3,6 @@ import { useEffect, useState } from "react";
 import { supabase } from "../../lib/supabase";
 import { useRouter } from "next/navigation";
 
-const WHATSAPP = "5599984806628";
-const INSTAGRAM = "https://instagram.com/eletroshop_itz";
-const FRETE_FIXO = 10.00;
-
 const produtosBase = [
   { id: 1, nome: "Carregador USB-C 30W Turbo", preco: 59.90, img: "https://images.unsplash.com/photo-1583394838336-acd977736f90?w=500", tag: "30% OFF", cor: "#ff3b30" },
   { id: 2, nome: "Cabo USB-C 1m Nylon", preco: 19.90, img: "https://images.unsplash.com/photo-1629131726692-a0f23e7a5cbd?w=500", tag: "Novo", cor: "#0a84ff" },
