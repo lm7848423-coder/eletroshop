@@ -6,64 +6,42 @@ import Link from "next/link";
 export default function Home() {
   const [produtos, setProdutos] = useState<any[]>([]);
   const [busca, setBusca] = useState("");
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function carregar() {
-      const { data } = await supabase.from("produtos").select("*");
+    supabase.from("produtos").select("*").then(({ data }) => {
       if (data) setProdutos(data);
-      setLoading(false);
-    }
-    carregar();
+    });
   }, []);
 
-  const filtrados = produtos.filter((p: any) => 
-    p.nome.toLowerCase().includes(busca.toLowerCase())
-  );
+  const filtrados = produtos.filter((p: any) => p.nome.toLowerCase().includes(busca.toLowerCase()));
 
   return (
-    <div className="min-h-screen bg-[#EBEBEB]">
-      <header className="bg-[#FFE600] sticky top-0 z-50 p-3 shadow">
+    <div style={{ minHeight: "100vh", background: "#EBEBEB" }}>
+      <header style={{ background: "#FFE600", padding: 12 }} className="sticky top-0 z-50 shadow">
         <div className="max-w-6xl mx-auto flex gap-3 items-center">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="bg-black text-[#FFE600] w-8 h-8 flex items-center justify-center rounded font-black">E</div>
-            <div className="leading-none">
-              <div className="font-black text-black text-sm">ELETROSHOP</div>
-              <div className="text-[9px] text-black font-bold">IMPERATRIZ E DAVINÓPOLIS</div>
-            </div>
-          </Link>
-          <div className="flex-1 flex">
-            <input value={busca} onChange={e=>setBusca(e.target.value)} placeholder="Buscar produtos..." className="w-full px-4 py-2 rounded-l-md outline-none text-black placeholder:text-gray-600 bg-white" />
-            <button className="bg-white px-3 rounded-r-md border-l text-black">🔍</button>
+          <div style={{ background: "black", color: "#FFE600", width: 32, height: 32, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 6, fontWeight: 900 }}>E</div>
+          <div style={{ lineHeight: 1 }}>
+            <div style={{ fontWeight: 900, color: "black", fontSize: 14 }}>ELETROSHOP</div>
+            <div style={{ fontSize: 9, color: "black", fontWeight: 700 }}>IMPERATRIZ E DAVINOPOLIS</div>
           </div>
-          <Link href="/carrinho" className="bg-black text-[#FFE600] px-4 py-2 rounded-md text-sm font-bold">Carrinho (0)</Link>
+          <input value={busca} onChange={e=>setBusca(e.target.value)} placeholder="Buscar produtos..." style={{ flex: 1, padding: 10, borderRadius: 8, color: "black", background: "white" }} />
+          <Link href="/carrinho" style={{ background: "black", color: "#FFE600", padding: "8px 16px", borderRadius: 8, fontWeight: 700, fontSize: 13 }}>Carrinho (0)</Link>
         </div>
       </header>
 
-      <div className="max-w-6xl mx-auto p-3 flex gap-2 text-xs">
-        <span className="bg-white px-3 py-2 rounded-full text-black font-bold border">📍 Entregamos em <b>Imperatriz e Davinópolis • MA</b></span>
-        <span className="bg-white px-3 py-2 rounded-full text-black font-bold border">🛡️ @eletroshop.itz</span>
-      </div>
-
       <main className="max-w-6xl mx-auto p-3">
-        {loading && <p className="text-center mt-20 text-black font-bold text-lg">Carregando produtos...</p>}
-        
-        {!loading && filtrados.length === 0 && (
-          <div className="text-center mt-20 bg-white p-10 rounded-xl border shadow">
-            <p className="text-xl font-black text-black">Nenhum produto encontrado</p>
-            <p className="text-sm text-black font-bold mt-2">Cadastre produtos em /admin</p>
-            <p className="text-sm text-gray-600 mt-1">Seu site está no ar, só falta produto!</p>
+        {filtrados.length === 0 ? (
+          <div style={{ textAlign: "center", marginTop: 80, background: "white", padding: 40, borderRadius: 16 }}>
+            <p style={{ fontSize: 22, fontWeight: 900, color: "black" }}>Nenhum produto encontrado</p>
+            <p style={{ fontSize: 14, color: "black", fontWeight: 700, marginTop: 8 }}>Seu site está no ar! Só falta cadastrar produtos em /admin</p>
           </div>
-        )}
-
-        {!loading && filtrados.length > 0 && (
+        ) : (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {filtrados.map((p: any) => (
-              <div key={p.id} className="bg-white rounded-xl p-3 shadow border">
-                <img src={p.imagem_url} alt={p.nome} className="w-full h-32 object-contain" />
-                <h3 className="text-sm mt-2 text-black font-bold">{p.nome}</h3>
-                <p className="font-black text-lg mt-1 text-black">R$ {Number(p.preco).toFixed(2)}</p>
-                <p className="text-[11px] text-green-700 font-bold">{p.estoque > 0 ? "Em estoque" : "Sem estoque"}</p>
+              <div key={p.id} style={{ background: "white", borderRadius: 12, padding: 12 }}>
+                <img src={p.imagem_url} alt={p.nome} style={{ width: "100%", height: 128, objectFit: "contain" }} />
+                <h3 style={{ fontSize: 14, marginTop: 8, color: "black", fontWeight: 700 }}>{p.nome}</h3>
+                <p style={{ fontWeight: 900, fontSize: 18, color: "black" }}>R$ {Number(p.preco).toFixed(2)}</p>
               </div>
             ))}
           </div>
