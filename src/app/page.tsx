@@ -30,13 +30,10 @@ export default function Home() {
 
   return (
     <div style={{ background: "#f5f5f7", minHeight: "100vh", fontFamily: "system-ui, -apple-system, sans-serif" }}>
-      {/* HEADER BRANCO PROFISSIONAL SEM EMOJI */}
+      {/* HEADER COM LOGO OFICIAL */}
       <header style={{ background: "white", height: 68, display: "flex", alignItems: "center", padding: "0 24px", justifyContent: "space-between", borderBottom: "1px solid #e5e5e5", position: "sticky", top: 0, zIndex: 100 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <div style={{ width: 38, height: 38, background: "#e5f0ff", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="#0a84ff"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>
-          </div>
-          <span style={{ fontWeight: 900, fontSize: 18, color: "#1d1d1f" }}>ELETROSHOP</span>
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <img src="/logo.png" alt="ELETROSHOP" style={{ height: 32, objectFit: "contain" }} />
         </div>
 
         <div style={{ flex: 1, maxWidth: 560, margin: "0 24px", position: "relative" }}>
@@ -53,7 +50,6 @@ export default function Home() {
       </header>
 
       <div style={{ maxWidth: 1280, margin: "0 auto", display: "flex", gap: 20, padding: 20 }}>
-        {/* LATERAL */}
         <aside style={{ width: 230 }}>
           <div style={{ background: "white", borderRadius: 12, padding: 16, border: "1px solid #e5e5e5" }}>
             <div style={{ fontWeight: 700, fontSize: 14, marginBottom: 10 }}>Categorias</div>
@@ -67,9 +63,7 @@ export default function Home() {
           </div>
         </aside>
 
-        {/* MAIN */}
         <main style={{ flex: 1 }}>
-          {/* BANNER PROFISSIONAL COM FOTO REAL, SEM EMOJI */}
           <div style={{ background: "linear-gradient(90deg,#0a84ff 0%, #00d1b2 100%)", borderRadius: 14, padding: "24px 28px", color: "white", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <div>
               <div style={{ fontSize: 24, fontWeight: 900 }}>Ofertas em Eletrônicos</div>
@@ -97,7 +91,6 @@ export default function Home() {
         </main>
       </div>
 
-      {/* BOTÕES FLUTUANTES CERTOS */}
       <div style={{ position: "fixed", right: 18, bottom: 22, display: "flex", flexDirection: "column", gap: 12, zIndex: 999 }}>
         <a href={INSTAGRAM} target="_blank" style={{ width: 56, height: 56, borderRadius: "50%", background: "linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf)", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 4px 12px rgba(0,0,0,0.2)" }}>
           <svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M12 2.2c3.2 0 3.6 0 4.9.1 1.2.1 2 .3 2.5.5.6.2 1 .5 1.4.9.4.4.7.8.9 1.4.2.5.4 1.3.5 2.5.1 1.3.1 1.7.1 4.9s0 3.6-.1 4.9c-.1 1.2-.3 2-.5 2.5-.2.6-.5 1-.9 1.4-.4.4-.8.7-1.4.9-.5.2-1.3.4-2.5.5-1.3.1-1.7.1-4.9.1s-3.6 0-4.9-.1c-1.2-.1-2-.3-2.5-.5a3.5 3.5 0 01-1.4-.9 3.5 3.5 0 01-.9-1.4c-.2-.5-.4-1.3-.5-2.5C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.9c.1-1.2.3-2 .5-2.5.2-.6.5-1 .9-1.4.4-.4.8-.7 1.4-.9.5-.2 1.3-.4 2.5-.5C8.4 2.2 8.8 2.2 12 2.2zm0 1.8c-3.1 0-3.5 0-4.7.1-1.1.1-1.7.2-2.1.4a2 2 0 00-.8.5 2 2 0 00-.5.8c-.2.4-.3 1-.4 2.1C4.4 8.5 4.4 8.9 4.4 12s0 3.5.1 4.7c.1 1.1.2 1.7.4 2.1.1.3.3.6.5.8.2.2.5.4.8.5.4.2 1 .3 2.1.4 1.2.1 1.6.1 4.7.1s3.5 0 4.7-.1c1.1-.1 1.7-.2 2.1-.4.3-.1.6-.3.8-.5.2-.2.4-.5.5-.8.2-.4.3-1 .4-2.1.1-1.2.1-1.6.1-4.7s0-3.5-.1-4.7c-.1-1.1-.2-1.7-.4-2.1a2 2 0 00-.5-.8 2 2 0 00-.8-.5c-.4-.2-1-.3-2.1-.4C15.5 4 15.1 4 12 4zm0 3.9a4.1 4.1 0 110 8.2 4.1 4.1 0 010-8.2zm0 6.4a2.3 2.3 0 100-4.6 2.3 2.3 0 000 4.6zm4.9-6.7a1 1 0 11-2 0 1 1 0 012 0z"/></svg>
