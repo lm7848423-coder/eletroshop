@@ -101,3 +101,68 @@ export default function Home() {
     </div>
   );
 }
+"use client";
+import { useEffect, useState } from "react";
+
+const FRETE_FIXO = 10;
+
+export default function Carrinho() {
+  const [carrinho, setCarrinho] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setCarrinho(JSON.parse(localStorage.getItem("carrinho") || "[]"));
+  }, []);
+
+  const totalProdutos = carrinho.reduce((acc, p) => acc + Number(p.preco), 0);
+  const total = totalProdutos + FRETE_FIXO;
+
+  const pagar = async () => {
+    setLoading(true);
+    const res = await fetch("/api/pagar", {
+      method: "POST",
+      body: JSON.stringify({ total, produtos: carrinho }),
+    });
+    const data = await res.json();
+    if (data.init_point) {
+      window.location.href = data.init_point;
+    } else {
+      alert("Erro: " + JSON.stringify(data));
+      setLoading(false);
+    }
+  };
+
+  const remover = (index: number) => {
+    const novo = carrinho.filter((_, i) => i !== index);
+    setCarrinho(novo);
+    localStorage.setItem("carrinho", JSON.stringify(novo));
+  };
+
+  return (
+    <div style={{ maxWidth: 800, margin: "0 auto", padding: 20, fontFamily: "system-ui" }}>
+      <h1 style={{ fontWeight: 800 }}>Seu Carrinho ({carrinho.length})</h1>
+      {carrinho.length === 0 && <p>Carrinho vazio. Volta pra loja!</p>}
+      {carrinho.map((p, i) => (
+        <div key={i} style={{ display: "flex", gap: 12, background: "white", padding: 12, borderRadius: 8, marginTop: 10, alignItems: "center" }}>
+          <img src={p.img || p.imagem_url} style={{ width: 60, height: 60, objectFit: "contain" }} />
+          <div style={{ flex: 1 }}>
+            <div style={{ fontWeight: 600 }}>{p.nome}</div>
+            <div style={{ color: "#0a84ff", fontWeight: 800 }}>R$ {Number(p.preco).toFixed(2)}</div>
+          </div>
+          <button onClick={() => remover(i)} style={{ color: "red", background: "none", border: "none", cursor: "pointer" }}>X</button>
+        </div>
+      ))}
+
+      {carrinho.length > 0 && (
+        <div style={{ background: "white", padding: 16, borderRadius: 12, marginTop: 20 }}>
+          <div style={{ display: "flex", justifyContent: "space-between" }}><span>Produtos:</span><span>R$ {totalProdutos.toFixed(2)}</span></div>
+          <div style={{ display: "flex", justifyContent: "space-between" }}><span>Frete fixo Imperatriz:</span><span>R$ {FRETE_FIXO.toFixed(2)}</span></div>
+          <div style={{ display: "flex", justifyContent: "space-between", fontWeight: 800, fontSize: 18, marginTop: 10, borderTop: "1px solid #eee", paddingTop: 10 }}><span>Total:</span><span>R$ {total.toFixed(2)}</span></div>
+          <button onClick={pagar} disabled={loading} style={{ width: "100%", marginTop: 16, background: "#009ee3", color: "white", padding: 14, borderRadius: 8, fontWeight: 800, border: "none", cursor: "pointer" }}>
+            {loading ? "Gerando PIX..." : "Pagar com PIX / Cartão"}
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
