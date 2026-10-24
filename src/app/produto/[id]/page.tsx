@@ -1,46 +1,36 @@
 "use client";
+export const dynamic = 'force-dynamic';
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { supabase } from "../../../lib/supabase";
+import { createClient } from '@supabase/supabase-js';
+const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!);
 
 export default function ProdutoPage(){
-  const { id } = useParams();
+  const params = useParams();
+  const id = params?.id as string;
   const router = useRouter();
-  const [p, setP] = useState<any>(null);
-
+  const [p,setP]=useState<any>(null);
+  const [loading,setLoading]=useState(true);
   useEffect(()=>{
-    supabase.from("produtos").select("*").eq("id", id).single().then(({data})=>setP(data));
+    if(!id) return;
+    supabase.from("produtos").select("*").eq("id",id).single().then(({data})=>{ setP(data); setLoading(false); });
   },[id]);
-
-  if(!p) return <div style={{padding:60, textAlign:"center"}}>Carregando...</div>;
-
-  const add = () => {
+  const add=()=>{
     const c = JSON.parse(localStorage.getItem("carrinho")||"[]");
     c.push({...p, qtd:1});
     localStorage.setItem("carrinho", JSON.stringify(c));
     router.push("/carrinho");
   };
-
+  if(loading) return <div style={{padding:40}}>Carregando...</div>;
+  if(!p) return <div style={{padding:40}}>Produto não encontrado</div>;
   return (
-    <div style={{background:"#f5f5f7", minHeight:"100vh", fontFamily:"system-ui"}}>
-      <header style={{background:"white", height:68, display:"flex", alignItems:"center", padding:"0 24px", justifyContent:"space-between", borderBottom:"1px solid #e5e5e5"}}>
-        <a href="/" style={{fontWeight:800, color:"#1d1d1f", textDecoration:"none"}}>ELETROSHOP</a>
-        <a href="/carrinho" style={{textDecoration:"none", color:"#1d1d1f", fontWeight:700, fontSize:12}}>Carrinho</a>
-      </header>
-      <div style={{maxWidth:1100, margin:"0 auto", padding:24, display:"grid", gridTemplateColumns:"1fr 1fr", gap:24}}>
-        <div style={{background:"white", borderRadius:20, padding:24, border:"1px solid #e5e5e5", display:"grid", placeItems:"center"}}>
-          <img src={p.imagem_url} style={{width:"100%", maxHeight:500, objectFit:"contain"}}/>
-        </div>
-        <div style={{background:"white", borderRadius:20, padding:24, border:"1px solid #e5e5e5"}}>
-          <div style={{background:"#0a84ff", color:"white", display:"inline-block", padding:"5px 12px", borderRadius:99, fontSize:11, fontWeight:800}}>{p.tag||"ORIGINAL"}</div>
-          <h1 style={{fontSize:28, fontWeight:900, marginTop:12}}>{p.nome}</h1>
-          <p style={{color:"#666", fontSize:14, marginTop:12}}>{p.descricao||"Produto original com garantia e entrega rápida em Imperatriz."}</p>
-          <div style={{fontSize:32, fontWeight:900, color:"#0a84ff", marginTop:20}}>R$ {Number(p.preco).toFixed(2)}</div>
-          <div style={{marginTop:20, display:"grid", gridTemplateColumns:"1fr 1fr", gap:12}}>
-            <button onClick={add} style={{height:48, borderRadius:10, border:"1px solid #1d1d1f", background:"white", fontWeight:700}}>Adicionar</button>
-            <button onClick={add} style={{height:48, borderRadius:10, border:"none", background:"#1d1d1f", color:"white", fontWeight:800}}>Comprar agora</button>
-          </div>
-        </div>
+    <div style={{maxWidth:1000, margin:"0 auto", padding:24, fontFamily:"system-ui", display:"grid", gridTemplateColumns:"1fr 1fr", gap:24}}>
+      <div style={{background:"white", borderRadius:16, padding:20, display:"grid", placeItems:"center"}}><img src={p.imagem_url} style={{width:"90%", maxHeight:400, objectFit:"contain"}}/></div>
+      <div>
+        <h1 style={{fontSize:26, fontWeight:900}}>{p.nome}</h1>
+        <div style={{fontSize:28, fontWeight:900, color:"#0a84ff", marginTop:12}}>R$ {Number(p.preco).toFixed(2)}</div>
+        <button onClick={add} style={{marginTop:20, width:"100%", background:"#0a84ff", color:"white", border:0, padding:"16px", borderRadius:12, fontWeight:800, fontSize:16}}>Adicionar ao Carrinho</button>
+        <a href="/" style={{display:"block", marginTop:16, color:"#0a84ff"}}>← Voltar</a>
       </div>
     </div>
   )
